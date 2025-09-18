@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loja de Roupas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #c67ae9;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+
+    header {
+      background-color: #200438;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+
+    main {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+
+    #produtos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      flex: 3 1 600px;
+      min-width: 300px;
+    }
+
+
+    .produto {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+
+    .produto img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+
+    .produto h3 {
+      margin: 10px 0 5px;
+    }
+
+
+    .produto p {
+      margin-bottom: 10px;
+    }
+
+
+    .produto button {
+      background: #632bde;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+
+    .produto button:hover {
+      background: #2e02c2;
+    }
+
+
+    #carrinho {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      flex-shrink: 0;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+
+    #lista-carrinho {
+      list-style: none;
+      margin: 10px 0;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+
+    #carrinho-icon {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+
+    #form-conta {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+
+    #form-conta h2 {
+      margin-bottom: 15px;
+    }
+
+
+    #form-conta label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+
+    #form-conta input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+
+    #finalizar-pedido {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+
+
+    #finalizar-pedido h2 {
+      margin-bottom: 15px;
+    }
+
+
+    #finalizar-pedido p {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+
+    #btn-finalizar {
+      background: #4018f1;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+
+    #btn-finalizar:hover {
+      background: #0056b3;
+    }
+
+
+    footer {
+      background-color: #2e0341;
+      color: #fff;
+      padding: 20px 10px;
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 15px;
+      font-size: 14px;
+    }
+
+
+    footer div {
+      min-width: 200px;
+    }
+
+
+    footer h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 5px;
+    }
+
+
+    footer a {
+      color: #ddd;
+      text-decoration: none;
+      margin-right: 10px;
+      font-size: 20px;
+      transition: color 0.3s;
+    }
+
+
+    footer a:hover {
+      color: #6c09e6;
+    }
+
+
+    #lista-carrinho::-webkit-scrollbar {
+      width: 6px;
+    }
+
+
+    #lista-carrinho::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Loja de Roupas</h1>
+    <div id="carrinho-icon">🛒 <span id="qtd-carrinho">0</span></div>
+  </header>
+
+
+  <main>
+    <section id="produtos"></section>
+
+
+    <aside>
+      <div id="carrinho">
+        <h2>Carrinho</h2>
+        <ul id="lista-carrinho"></ul>
+        <p>Total: R$ <span id="total">0.00</span></p>
+      </div>
+
+
+      <form id="form-conta">
+        <h2>Crie sua Conta</h2>
+        <label for="nome">Nome Completo</label>
+        <input type="text" id="nome" required />
+
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" required />
+
+
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" required />
+
+
+        <button type="submit" style="background:#4f02a8; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer;">Criar Conta</button>
+      </form>
+
+
+      <section id="finalizar-pedido">
+        <h2>Finalizar Pedido</h2>
+        <p>Itens no carrinho: <span id="final-itens">0</span></p>
+        <p>Total: R$ <span id="final-total">0.00</span></p>
+        <button id="btn-finalizar" disabled>Finalizar Compra</button>
+      </section>
+    </aside>
+  </main>
+
+
+  <footer>
+    <div>
+      <h3>Contato</h3>
+      <p>📞 (11) 99999-9999</p>
+      <p>✉️ contato@lojaderoupas.com</p>
+      <p>📍 Rua das Flores, 123 - São Paulo, SP</p>
+    </div>
+
+
+    <div>
+      <h3>Redes Sociais</h3>
+      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">📘</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">📸</a>
+      <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">🐦</a>
+    </div>
+
+
+    <div style="align-self: center; font-size: 12px; color: #aaa;">
+      &copy; 2025 Loja de Roupas. Todos os direitos reservados.
+    </div>
+  </footer>
+
+
+  <script>
+    const produtos = [
+      {
+        nome: "Camiseta Branca",
+        preco: 49.9,
+        imagem: "https://cdn.awsli.com.br/2500x2500/1107/1107065/produto/434880711d78f4902d.jpg",
+      },
+      {
+        nome: "Calça Jeans",
+        preco: 89.9,
+        imagem: "https://t-static.dafiti.com.br/R0upfT1Dhj4D5vY2aTzkCeXkvIo=/fit-in/430x623/static.dafiti.com.br/p/ed-e-a-e-jeans-cal%C3%A7a-jeans-feminina-premium-skinny-delave-modela-o-corpo-cintura-alta-com-elastano-premium-4075-25501541-1-zoom.jpg",
+      },
+      {
+        nome: "Jaqueta Preta",
+        preco: 159.9,
+        imagem: "https://thumb.braavo.me/saint/1000/221261420.webp",
+      },
+      {
+        nome: "Vestido preto",
+        preco: 129.9,
+        imagem: "https://brandstime.com.br/cdn/shop/files/vestido_preto_rodado_curto_3__1_700x.jpg?v=1724985022",
+      },
+      {
+        nome: "Tênis Esportivo",
+        preco: 199.9,
+        imagem: "https://multitare.com/cdn/shop/files/Tenis_Esportivo_Masculino_Fast_Multitare_800x.jpg?v=1741125090",
+      },
+      {
+        nome: "Camiseta com estampada",
+        preco: 39.9,
+        imagem: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m26ojm3rnvme96",
+      },
+      {
+        nome: "Calça jeans rasgada",
+        preco: 27.9,
+        imagem: "https://adaptive-images.uooucdn.com.br/tr:w-1100,h-1594,c-at_max,pr-true,q-90/a191-ofzisq/pv/39/24/78/c35b734660687347fdd32d8fdf.jpg",
+      },
+      {
+        nome: "Moletom new jeans",
+        preco: 100.9,
+        imagem: "https://http2.mlstatic.com/D_NQ_NP_998381-MLB79971449568_102024-O-moletom-canguru-new-jeans-bunnies-kpop-bluso-de-frio-y2k.webp",
+      },
+      {
+        nome: "tênis NIKE",
+        preco: 227.9,
+        imagem: "https://acdn-us.mitiendanube.com/stores/002/508/449/products/img_7415-da9f6165503441e33b17331590463757-1024-1024.jpeg",
+      },
+       
+    ];
+
+
+    const secaoProdutos = document.getElementById("produtos");
+    const listaCarrinho = document.getElementById("lista-carrinho");
+    const qtdCarrinho = document.getElementById("qtd-carrinho");
+    const totalSpan = document.getElementById("total");
+    const finalItens = document.getElementById("final-itens");
+    const finalTotal = document.getElementById("final-total");
+    const btnFinalizar = document.getElementById("btn-finalizar");
+
+
+    const formConta = document.getElementById("form-conta");
+
+
+    let carrinho = [];
+    let usuarioCriado = false;
+
+
+    function mostrarProdutos() {
+      produtos.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "produto";
+        div.innerHTML = `
+          <img src="${item.imagem}" alt="${item.nome}">
+          <h3>${item.nome}</h3>
+          <p>R$ ${item.preco.toFixed(2)}</p>
+          <button onclick="adicionarAoCarrinho(${index})">Adicionar</button>
+        `;
+        secaoProdutos.appendChild(div);
+      });
+    }
+
+
+    function adicionarAoCarrinho(index) {
+      carrinho.push(produtos[index]);
+      atualizarCarrinho();
+    }
+
+
+    function atualizarCarrinho() {
+      listaCarrinho.innerHTML = "";
+      let total = 0;
+
+
+      carrinho.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+        listaCarrinho.appendChild(li);
+        total += item.preco;
+      });
+
+
+      qtdCarrinho.textContent = carrinho.length;
+      totalSpan.textContent = total.toFixed(2);
+      finalItens.textContent = carrinho.length;
+      finalTotal.textContent = total.toFixed(2);
+
+
+     
+      btnFinalizar.disabled = !(usuarioCriado && carrinho.length > 0);
+    }
+
+
+    formConta.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value;
+
+
+      if (nome === "" || email === "" || senha === "") {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
+
+
+   
+      usuarioCriado = true;
+
+
+      alert(`Conta criada com sucesso! Bem-vindo(a), ${nome}.`);
+
+
+      formConta.reset();
+
+
+      btnFinalizar.disabled = !(usuarioCriado && carrinho.length > 0);
+    });
+
+
+    btnFinalizar.addEventListener("click", function () {
+      if (!usuarioCriado) {
+        alert("Por favor, crie sua conta antes de finalizar o pedido.");
+        return;
+      }
+      if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio.");
+        return;
+      }
+
+
+      alert("Compra finalizada com sucesso! Obrigado pela preferência.");
+      carrinho = [];
+      atualizarCarrinho();
+    });
+
+
+    mostrarProdutos();
+  </script>
+</body>
+</html>
